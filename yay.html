@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yay 🤍</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #ffe6f0, #e0c3fc);
+    font-family: 'Poppins', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* background decorations */
+  .sparkle {
+    position: absolute;
+    font-size: 18px;
+    opacity: 0.6;
+    animation: float 8s linear infinite;
+  }
+
+  @keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-120vh); }
+  }
+
+  .wrapper {
+    text-align: center;
+    z-index: 2;
+  }
+
+  .video-box {
+    width: 80vw;
+    max-width: 720px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+    margin-bottom: 25px;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: transparent;
+  }
+
+  .text {
+    font-size: 26px;
+    color: #ff5fa2;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    margin-bottom: 18px;
+  }
+
+  .text.show {
+    opacity: 1;
+  }
+
+  button {
+    padding: 14px 36px;
+    font-size: 20px;
+    border-radius: 35px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ff5fa2, #ff85c1);
+    color: white;
+    animation: pulse 2s infinite;
+    transition: opacity 0.6s ease;
+  }
+
+  button.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- sparkles -->
+<script>
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.innerText = ["✨","💗","⭐","💞"][Math.floor(Math.random()*4)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = (6 + Math.random()*4) + "s";
+    document.body.appendChild(s);
+  }
+</script>
+
+<div class="wrapper">
+
+  <div class="video-box">
+    <video id="hugVideo" poster="hug.png" playsinline preload="metadata">
+      <source src="hug.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="text" id="yayText">Yayy :3</div>
+
+  <button id="hugBtn" onclick="startHug()">Hug me? :3</button>
+
+</div>
+
+<script>
+  const video = document.getElementById("hugVideo");
+  const button = document.getElementById("hugBtn");
+  const text = document.getElementById("yayText");
+
+  function startHug() {
+    button.classList.add("hide");
+
+    setTimeout(() => {
+      text.classList.add("show");
+      video.currentTime = 0;
+      video.play();
+    }, 600);
+  }
+
+  video.addEventListener("ended", () => {
+    text.classList.remove("show");
+
+    setTimeout(() => {
+      button.innerText = "Hug me again :3";
+      button.classList.remove("hide");
+    }, 1000);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hug Day 🤍</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffd6e8, #e0c3fc);
+    font-family: 'Poppins', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    z-index: 2;
+  }
+
+  h1 {
+    color: #ff5fa2;
+    margin-bottom: 30px;
+    font-size: 28px;
+    transition: 0.3s ease;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    position: relative;
+  }
+
+  button {
+    padding: 12px 26px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  .yes {
+    background: #4CAF50;
+    color: white;
+  }
+
+  .yes:hover {
+    transform: scale(1.08);
+  }
+
+  .no {
+    background: #ff4d4d;
+    color: white;
+    position: relative;
+  }
+
+  .chibi {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    pointer-events: none;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 2s linear forwards;
+  }
+
+  @keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-120vh); opacity: 0; }
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1 id="question">Do you want a hug?</h1>
+
+    <div class="buttons">
+      <button class="yes" onclick="yesHug()">Yes 💚</button>
+      <button class="no" id="noBtn">No 💔</button>
+    </div>
+  </div>
+
+  <!-- Chibi avatar -->
+  <img src="neutral.png" class="chibi" id="chibi">
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const question = document.getElementById("question");
+  const chibi = document.getElementById("chibi");
+
+  const sadTexts = [
+    "really? Ó⁠╭⁠╮⁠Ò",
+    "Whyy??? (⁠･ั⁠﹏⁠･ั⁠)",
+    "I'll cry ༎ຶ⁠‿⁠༎ຶ",
+    "That hurts ಥ⁠╭⁠╮⁠ಥ",
+    "My hug is lonely now (⁠ノ⁠ಠ⁠益⁠ಠ⁠)⁠ノ",
+    "Still no?? 💔",
+    "I tried my best… 😔",
+    "Okay but hug pls 🫂"
+  ];
+
+  const cryImages = ["1.png", "2.png", "3.png"];
+
+  let textIndex = 0;
+  let imageIndex = 0;
+
+  function moveNoButton() {
+    // move NO button
+    const x = Math.random() * 260 - 130;
+    const y = Math.random() * 180 - 90;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+    // change text
+    question.innerText = sadTexts[textIndex];
+    textIndex = (textIndex + 1) % sadTexts.length;
+
+    // change chibi image
+    chibi.src = cryImages[imageIndex];
+    imageIndex = (imageIndex + 1) % cryImages.length;
+  }
+
+  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("click", moveNoButton);
+
+  function yesHug() {
+    question.innerText = "Come here 🤗💞";
+    chibi.src = "neutral.png";
+
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = "100vh";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 2000);
+    }
+  }
+</script>
+
+</body>
+</html>
