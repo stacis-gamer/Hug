@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hug Day 🤍</title>
 
 <style>
   body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(135deg, #ffd6e8, #e0c3fc);
     font-family: 'Poppins', system-ui, sans-serif;
     display: flex;
@@ -18,34 +19,41 @@
 
   .card {
     background: white;
-    padding: 40px;
-    border-radius: 25px;
+    padding: 32px 28px;
+    border-radius: 24px;
     text-align: center;
     box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    width: min(90vw, 340px);
     z-index: 2;
+    animation: popIn 0.5s ease;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
   }
 
   h1 {
     color: #ff5fa2;
-    margin-bottom: 30px;
-    font-size: 28px;
-    transition: 0.3s ease;
+    margin-bottom: 22px;
+    font-size: 22px;
+    transition: 0.4s ease;
   }
 
   .buttons {
     display: flex;
-    gap: 20px;
+    gap: 14px;
     justify-content: center;
     position: relative;
   }
 
   button {
-    padding: 12px 26px;
-    font-size: 18px;
-    border-radius: 30px;
+    padding: 12px 22px;
+    font-size: 16px;
+    border-radius: 999px;
     border: none;
     cursor: pointer;
-    transition: 0.25s ease;
+    transition: transform 0.3s ease;
   }
 
   .yes {
@@ -53,8 +61,8 @@
     color: white;
   }
 
-  .yes:hover {
-    transform: scale(1.08);
+  .yes:active {
+    transform: scale(0.95);
   }
 
   .no {
@@ -65,22 +73,43 @@
 
   .chibi {
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 130px;
+    width: 110px;
     pointer-events: none;
+    transition: 0.4s ease;
   }
 
   .heart {
     position: absolute;
-    font-size: 24px;
-    animation: floatUp 2s linear forwards;
+    font-size: 22px;
+    animation: floatUp 2.6s ease-out forwards;
   }
 
   @keyframes floatUp {
     from { transform: translateY(0); opacity: 1; }
     to { transform: translateY(-120vh); opacity: 0; }
+  }
+
+  /* popup */
+  .popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .popup-box {
+    background: white;
+    padding: 18px 28px;
+    border-radius: 18px;
+    font-size: 18px;
+    color: #ff5fa2;
+    animation: popIn 0.4s ease;
   }
 </style>
 </head>
@@ -96,62 +125,68 @@
     </div>
   </div>
 
-  <!-- Chibi avatar -->
+  <!-- chibi -->
   <img src="neutral.png" class="chibi" id="chibi">
+
+  <!-- popup -->
+  <div class="popup" id="popup" onclick="goNext()">
+    <div class="popup-box">Tap to continue</div>
+  </div>
 
 <script>
   const noBtn = document.getElementById("noBtn");
   const question = document.getElementById("question");
   const chibi = document.getElementById("chibi");
+  const popup = document.getElementById("popup");
 
   const sadTexts = [
     "really? Ó⁠╭⁠╮⁠Ò",
     "Whyy??? (⁠･ั⁠﹏⁠･ั⁠)",
     "I'll cry ༎ຶ⁠‿⁠༎ຶ",
     "That hurts ಥ⁠╭⁠╮⁠ಥ",
-    "My hug is lonely now (⁠ノ⁠ಠ⁠益⁠ಠ⁠)⁠ノ",
     "Still no?? 💔",
-    "I tried my best… 😔",
     "Okay but hug pls 🫂"
   ];
 
   const cryImages = ["1.png", "2.png", "3.png"];
-
   let textIndex = 0;
   let imageIndex = 0;
 
   function moveNoButton() {
-    // move NO button
-    const x = Math.random() * 260 - 130;
-    const y = Math.random() * 180 - 90;
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 140 - 70;
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
 
-    // change text
     question.innerText = sadTexts[textIndex];
     textIndex = (textIndex + 1) % sadTexts.length;
 
-    // change chibi image
     chibi.src = cryImages[imageIndex];
     imageIndex = (imageIndex + 1) % cryImages.length;
   }
 
-  noBtn.addEventListener("mouseenter", moveNoButton);
   noBtn.addEventListener("click", moveNoButton);
 
   function yesHug() {
-    question.innerText = "Come here 🤗💞";
-    chibi.src = "neutral.png";
+    question.innerText = "I knew it (⁠灬⁠º⁠‿⁠º⁠灬⁠)⁠♡";
+    chibi.src = "4.png";
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 16; i++) {
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.innerText = "💖";
       heart.style.left = Math.random() * 100 + "vw";
       heart.style.top = "100vh";
       document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 2000);
+      setTimeout(() => heart.remove(), 2600);
     }
+
+    setTimeout(() => {
+      popup.style.display = "flex";
+    }, 1400);
+  }
+
+  function goNext() {
+    window.location.href = "hug.html";
   }
 </script>
 
