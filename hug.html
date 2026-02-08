@@ -22,7 +22,7 @@
     position: absolute;
     font-size: 18px;
     opacity: 0.6;
-    animation: float 8s linear infinite;
+    animation: float 10s linear infinite;
   }
 
   @keyframes float {
@@ -38,7 +38,7 @@
   .chibi {
     width: 150px;
     margin-bottom: 20px;
-    transition: 0.6s ease;
+    transition: transform 0.8s ease, opacity 0.8s ease;
   }
 
   .card {
@@ -46,11 +46,11 @@
     padding: 32px 36px;
     border-radius: 28px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-    animation: popIn 0.6s ease;
+    animation: popIn 0.9s ease-in-out;
   }
 
   @keyframes popIn {
-    from { transform: scale(0.9); opacity: 0; }
+    from { transform: scale(0.92); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
 
@@ -58,13 +58,14 @@
     color: #ff5fa2;
     font-size: 24px;
     margin-bottom: 24px;
-    transition: 0.4s ease;
+    transition: all 0.7s ease;
   }
 
   .buttons {
     display: flex;
     gap: 18px;
     justify-content: center;
+    transition: opacity 0.6s ease;
   }
 
   button {
@@ -73,7 +74,7 @@
     border-radius: 30px;
     border: none;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: transform 0.35s ease, opacity 0.35s ease;
   }
 
   .yes {
@@ -86,15 +87,20 @@
     color: white;
   }
 
+  .yes:active,
+  .no:active {
+    transform: scale(0.94);
+  }
+
   .proceed {
     background: linear-gradient(135deg, #ff5fa2, #ff85c1);
     color: white;
-    animation: pulse 2s infinite;
+    animation: pulse 2.4s ease-in-out infinite;
   }
 
   @keyframes pulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.06); }
+    50% { transform: scale(1.05); }
     100% { transform: scale(1); }
   }
 
@@ -103,27 +109,35 @@
     position: fixed;
     inset: 0;
     background: rgba(255,230,240,0.97);
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
     z-index: 20;
+  }
+
+  .overlay.show {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .loader-text {
     font-size: 26px;
     color: #ff5fa2;
     margin-bottom: 28px;
-    animation: breathe 2s ease-in-out infinite;
+    animation: breathe 2.6s ease-in-out infinite;
   }
 
   @keyframes breathe {
     0%,100% { opacity: 0.9; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.45; }
   }
 
   .hug-btn {
-    display: none;
+    opacity: 0;
     padding: 14px 36px;
     font-size: 20px;
     border-radius: 35px;
@@ -131,7 +145,12 @@
     background: linear-gradient(135deg, #ff5fa2, #ff85c1);
     color: white;
     cursor: pointer;
-    animation: pulse 2s infinite;
+    animation: pulse 2.6s ease-in-out infinite;
+    transition: opacity 0.8s ease;
+  }
+
+  .hug-btn.show {
+    opacity: 1;
   }
 </style>
 </head>
@@ -144,7 +163,7 @@
     s.className = "sparkle";
     s.innerText = ["✨","💗","⭐","💞"][Math.floor(Math.random()*4)];
     s.style.left = Math.random() * 100 + "vw";
-    s.style.animationDuration = (6 + Math.random()*4) + "s";
+    s.style.animationDuration = (8 + Math.random()*6) + "s";
     document.body.appendChild(s);
   }
 </script>
@@ -181,24 +200,32 @@
   function noClick() {
     text.innerText = "Haha Jk, There’s no going back now 😈";
     chibi.src = "6.png";
-    noBtn.style.display = "none";
+    chibi.style.transform = "scale(1.03)";
+    noBtn.style.opacity = "0";
+    setTimeout(() => noBtn.style.display = "none", 400);
   }
 
   function yesClick() {
     text.innerText = "Ehehehehe less gooo 😆";
     chibi.src = "7.png";
-    buttons.innerHTML = `<button class="proceed" onclick="startHug()">Proceed ✨</button>`;
+    chibi.style.transform = "scale(1.05)";
+    buttons.style.opacity = "0";
+
+    setTimeout(() => {
+      buttons.innerHTML = `<button class="proceed" onclick="startHug()">Proceed ✨</button>`;
+      buttons.style.opacity = "1";
+    }, 500);
   }
 
   function startHug() {
-    overlay.style.display = "flex";
+    overlay.classList.add("show");
 
     const steps = ["Preparing for hug", "Hang on", "Alright"];
     let i = 0;
 
     let vib = setInterval(() => {
       if (navigator.vibrate) navigator.vibrate(120);
-    }, 220);
+    }, 260);
 
     loaderText.innerText = steps[i];
 
@@ -210,11 +237,11 @@
         clearInterval(seq);
         setTimeout(() => {
           clearInterval(vib);
-          loaderText.style.display = "none";
-          hugBtn.style.display = "block";
-        }, 1200);
+          loaderText.style.opacity = "0";
+          hugBtn.classList.add("show");
+        }, 1600);
       }
-    }, 2000);
+    }, 2600);
   }
 
   function goYay() {
